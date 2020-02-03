@@ -12,7 +12,8 @@ class AudioFile:
         self.file_format: str = None
         self.new_name: str = None
         self.feedback = Feedback()
-        self.exsits = False
+        self.org_exists = os.path.exists(os.path.join(self.location))
+        self._new_exists = False
         self.determine_format()
 
     def determine_format(self):
@@ -22,7 +23,7 @@ class AudioFile:
     def rename(self):
         if self.new_name is None:
             self.new_name = self.artist_name + ' - ' + self.title
-            self.feedback.log('New filename not provided. Cannot rename')
+            self.feedback.log('New filename not provided. Cannot rename!')
 
         if self.location is None:
             self.location = os.getcwd()
@@ -34,12 +35,13 @@ class AudioFile:
         old_name = os.path.join(self.location, self.org_name)
         new_name = os.path.join(self.location, self.new_name)
 
-        if not os.path.exists(old_name):
-            self.feedback.error("WARNING: Original file does not exist")
+        if not self.org_exists:
+            self.feedback.error("WARNING: Original file does not exist!")
             return False
 
         try:
             os.rename(old_name, new_name)
+            self._new_exists = os.path.exists(old_name)
         except FileExistsError:
             self.feedback.error('New File already exists')
             return False
@@ -47,4 +49,4 @@ class AudioFile:
             self.feedback.error('File does not exist')
             return False
 
-        return True
+        return self._new_exists

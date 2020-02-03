@@ -10,8 +10,12 @@ if __name__ == '__main__':
     parser.add_argument('--loc=', metavar='filename', dest="location", nargs='*')
 
     args = parser.parse_args()
-    print(args.location)
-    print(args.data_file)
+    print(args.location[0])
+    print(args.data_file[0])
+
+    os.chdir(args.location[0])
+    with open(args.data_file[0], 'r') as fp:
+        print(fp.readline(1))
 
 
 
