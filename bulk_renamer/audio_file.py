@@ -4,7 +4,7 @@ from feedback import Feedback
 
 class AudioFile:
     def __init__(self, org_name: str, location: str, title: str, artist: str):
-        self.org_name: str = org_name
+        self.org_name: str = org_name.strip()
         self.location: str = location
         self.title: str = title.rstrip()
         self.artist_name: str = artist.rstrip()
@@ -22,11 +22,11 @@ class AudioFile:
     def determine_format(self):
         if self.org_name is not None:
             fname = self.org_name.split(".")
-            self.file_format = fname[-1].lower()
+            self.file_format = fname[-1]
 
     def rename(self):
         if self.new_name is None:
-            self.new_name = self.artist_name + ' - ' + self.title
+            self.new_name = self.artist_name + ' - ' + self.title + '.' + self.file_format
             self.feedback.log('New filename not provided. Cannot rename!')
 
         if self.location is None:
@@ -44,6 +44,7 @@ class AudioFile:
             return False
 
         try:
+            self.feedback.log(f"Rename {old_name} to {new_name}")
             os.rename(old_name, new_name)
             self._new_exists = os.path.exists(old_name)
         except FileExistsError:
