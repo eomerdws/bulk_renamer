@@ -6,8 +6,8 @@ class AudioFile:
     def __init__(self, org_name: str, location: str, title: str, artist: str):
         self.org_name: str = org_name
         self.location: str = location
-        self.title: str = title
-        self.artist_name: str = artist
+        self.title: str = title.rstrip()
+        self.artist_name: str = artist.rstrip()
         self.year: str = None
         self.file_format: str = None
         self.new_name: str = None
@@ -16,9 +16,13 @@ class AudioFile:
         self._new_exists = False
         self.determine_format()
 
+    def __str__(self):
+        return self.artist_name + ' - ' + self.title + '.' + self.file_format
+
     def determine_format(self):
-        fname = self.file_format.split(".")
-        self.file_format = fname[-1].lower()
+        if self.org_name is not None:
+            fname = self.org_name.split(".")
+            self.file_format = fname[-1].lower()
 
     def rename(self):
         if self.new_name is None:
