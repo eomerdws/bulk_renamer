@@ -26,8 +26,6 @@ if __name__ == '__main__':
         if not d:  # empty line
             continue
         a = d.strip()
-        # print(a[10:43])
-        # print(a[43:68])
 
         audio: AudioFile = AudioFile(a[0:10], loc, a[10:43], a[43:68])
         audio.rename()
